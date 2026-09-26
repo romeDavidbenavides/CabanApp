@@ -1,0 +1,12 @@
+# Basura del sistema operativo, nunca parte del proyecto
+Microsoft/
+desktop.ini
+Thumbs.db
+.DS_Store
+
+# Por si alguna vez se cae algo sensible acá por error
+*.env
+.env*
+service-account*.json
+*serviceAccount*.json
+*firebase-adminsdk*.json

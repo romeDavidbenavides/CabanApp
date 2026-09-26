@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CabanApp</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="logo-192.png" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#ba3038" />
+    <link rel="apple-touch-icon" href="logo-192.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="CabanApp" />
+  </head>
+  <body>
+    <section id="inicio" class="inicio">
+      <button id="btn-admin" class="admin">
+        👤 <span>Administrador</span>
+      </button>
+      <div class="inicio-centro">
+        <label class="switch notificaciones-inicio"
+          ><input id="notificaciones" type="checkbox" /><span></span
+          >Notificaciones</label
+        >
+        <h1>Caban<span>App</span></h1>
+        <p>Control de reservas</p>
+        <div class="tarjetas">
+          <button id="btn-agenda" class="tarjeta">
+            <b>▣</b><span>Ver Agenda</span></button
+          ><button id="btn-nueva" class="tarjeta">
+            <b>＋</b><span>Agregar</span>
+          </button>
+        </div>
+      </div>
+    </section>
+    <section id="agenda" class="oculto">
+      <header>
+        <button id="btn-volver" class="marca" type="button" aria-label="Volver al menú principal">⌂</button>
+        <div class="fecha-nav">
+          <button id="anterior">‹</button>
+          <h2 id="fecha-titulo"></h2>
+          <button id="siguiente">›</button>
+        </div>
+      </header>
+      <main>
+        <div class="linea-tiempo">
+          <span>Cabaña</span>
+          <div><b>1 AM</b><b>6 AM</b><b>12 PM</b><b>6 PM</b><b>12 AM</b></div>
+        </div>
+        <div id="agenda-cuerpo"></div>
+      </main>
+    </section>
+    <div id="avisos" aria-live="polite"></div>
+    <div id="modal-reserva" class="modal oculto">
+      <form class="caja" id="form-reserva">
+        <div class="doble">
+          <label>Fecha<input id="fecha-reserva" type="date" required /></label
+          ><label
+            >Hora<input id="hora-reserva" type="time" step="60" required
+          /></label>
+        </div>
+        <div class="doble">
+          <label>Cabaña<select id="cabana-reserva" required></select></label
+          ><label
+            >Estado<select id="estado-reserva">
+              <option value="ocupado">🔴 Ocupada</option>
+              <option value="reserva">🟡 Reserva</option>
+              <option value="aseo">🔵 Aseo</option>
+              <option value="mantenimiento">⚫ Mantenimiento</option>
+              <option value="cortesia">🟣 Cortesía</option>
+            </select></label
+          >
+        </div>
+        <div class="doble">
+          <label id="grupo-duracion"
+            >Duración<select id="duracion-reserva"></select></label
+          ><label
+            >Hora extra<select id="hora-extra">
+              <option>No</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </select></label
+          >
+        </div>
+        <label
+          >Persona de turno<input
+            id="persona-turno"
+            required
+            placeholder="Nombre del trabajador" /></label
+        ><label
+          >Número de placa<input
+            id="cliente-nombre"
+            required
+            placeholder="Ejemplo: ABC123"
+        /></label>
+        <div class="doble">
+          <label
+            >Personas extra<select id="personas-extra">
+              <option>No</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </select></label
+          ><label
+            >Reactivación jacuzzi<select id="reactiva-jacuzzi">
+              <option>No</option>
+              <option>1 vez</option>
+              <option>2 veces</option>
+              <option>3 veces</option>
+            </select></label
+          >
+        </div>
+        <label
+          >Observaciones<textarea id="cliente-observacion" rows="2"></textarea>
+        </label>
+        <div class="acciones">
+          <button type="button" class="secundario" data-cerrar="modal-reserva">
+            Cancelar</button
+          ><button class="primario">Aceptar</button>
+        </div>
+      </form>
+    </div>
+    <div id="modal-confirmar-reserva" class="modal oculto">
+      <div class="caja">
+        <p class="sobretexto">CONFIRMAR</p>
+        <h3 id="confirmar-reserva-cuerpo"></h3>
+        <div class="acciones">
+          <button
+            type="button"
+            class="secundario"
+            data-cerrar="modal-confirmar-reserva"
+          >
+            Revisar</button
+          ><button id="confirmar-reserva-aceptar" class="primario">
+            Sí, agregar
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="modal-acciones" class="modal oculto">
+      <div class="caja menu">
+        <p class="sobretexto">CABAÑA</p>
+        <h3>Modificación</h3>
+        <button id="accion-detalle">Ver detalle</button
+        ><button id="accion-modificar">Modificar</button
+        ><button id="accion-salida">Marcar salida del cliente</button
+        ><button id="accion-eliminar" class="peligro">Eliminar registro</button
+        ><button class="secundario" data-cerrar="modal-acciones">
+          Cancelar
+        </button>
+      </div>
+    </div>
+    <div id="modal-detalle" class="modal oculto">
+      <div class="caja">
+        <p class="sobretexto">DETALLE</p>
+        <h3 id="detalle-titulo"></h3>
+        <div id="detalle-cuerpo"></div>
+        <div class="acciones">
+          <button class="secundario" data-cerrar="modal-detalle">Cerrar</button>
+        </div>
+      </div>
+    </div>
+    <div id="modal-modificar" class="modal oculto">
+      <form class="caja" id="form-modificar">
+        <p class="sobretexto">CABAÑA</p>
+        <h3>Modificar reserva</h3>
+        <label>Número de placa<input id="modificar-cliente" required /></label>
+        <label
+          >¿Quién modifica?<input
+            id="modificar-trabajador"
+            required
+            placeholder="Nombre de quien hace el cambio"
+        /></label>
+        <div class="doble">
+          <label
+            >Personas extra<select id="modificar-personas-extra">
+              <option>No</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </select></label
+          ><label
+            >Hora extra<select id="modificar-hora-extra">
+              <option>No</option>
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+            </select></label
+          >
+        </div>
+        <label
+          >Reactivación jacuzzi<select id="modificar-jacuzzi">
+            <option>No</option>
+            <option>1 vez</option>
+            <option>2 veces</option>
+            <option>3 veces</option>
+          </select></label
+        >
+        <label
+          >Observaciones<textarea id="modificar-observacion" rows="2"></textarea>
+        </label>
+        <div class="acciones">
+          <button type="button" class="secundario" data-cerrar="modal-modificar">
+            Cancelar</button
+          ><button class="primario">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+    <div id="modal-eliminar" class="modal oculto">
+      <form class="caja" id="form-eliminar">
+        <p class="sobretexto">ELIMINAR</p>
+        <h3>Eliminar reserva</h3>
+        <label>Trabajador<input id="eliminar-trabajador" required /></label
+        ><label
+          >Observación obligatoria<textarea
+            id="eliminar-observacion"
+            required
+            rows="3"
+          ></textarea>
+        </label>
+        <div class="acciones">
+          <button type="button" class="secundario" data-cerrar="modal-eliminar">
+            Cancelar</button
+          ><button class="peligro">Eliminar</button>
+        </div>
+      </form>
+    </div>
+    <div id="modal-eliminar-aseo" class="modal oculto">
+      <div class="caja menu">
+        <h3>Eliminar aseo</h3>
+        <p>¿Qué deseas eliminar?</p>
+        <button id="eliminar-solo-aseo">Solo el aseo</button>
+        <button id="eliminar-registro-completo" class="peligro">Registro completo</button>
+        <button class="secundario" data-cerrar="modal-eliminar-aseo">Cancelar</button>
+      </div>
+    </div>
+    <div id="modal-salida" class="modal oculto">
+      <form class="caja" id="form-salida">
+        <p class="sobretexto">SALIDA</p>
+        <h3>Registrar salida</h3>
+        <div class="doble">
+          <label
+            >Fecha real de salida<input id="salida-fecha" type="date" required /></label
+          ><label
+            >Hora real de salida<input
+            id="salida-hora"
+            type="time"
+            step="60"
+            required /></label
+          >
+        </div>
+        <label>Trabajador<input id="salida-trabajador" required /></label
+        ><label
+          >Observación<textarea id="salida-observacion" rows="2"></textarea>
+        </label>
+        <div class="acciones">
+          <button type="button" class="secundario" data-cerrar="modal-salida">
+            Cancelar</button
+          ><button class="primario">Confirmar salida</button>
+        </div>
+      </form>
+    </div>
+    <div id="modal-password" class="modal oculto">
+      <div class="caja">
+        <p class="sobretexto">ACCESO SEGURO</p>
+        <h3>Administrador</h3>
+        <label>Contraseña<input id="password-admin" type="password" /></label>
+        <div class="acciones">
+          <button id="btn-cancelar-password" class="secundario">Cancelar</button
+          ><button id="btn-ingresar-password" class="primario">Ingresar</button>
+        </div>
+      </div>
+    </div>
+    <div id="modal-admin" class="modal oculto">
+      <div class="caja">
+        <p class="sobretexto">REPORTES</p>
+        <h3>Panel administrador</h3>
+        <label>Desde<input id="admin-fecha-inicio" type="date" /></label
+        ><label>Hasta<input id="admin-fecha-fin" type="date" /></label>
+        <div class="acciones">
+          <button id="btn-cerrar-admin" class="secundario">Cerrar</button
+          ><button id="btn-descargar-excel" class="primario">
+            Descargar Excel
+          </button>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
